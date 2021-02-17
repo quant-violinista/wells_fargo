@@ -1,33 +1,26 @@
-//
-// Created by Prasenjit on 2/16/2021.
-//
-
-#ifndef WELLS_FARGO_PATTERN
-#define WELLS_FARGO_PATTERN
-
+#include <iostream>
 #include <string>
-#include<iostream>
 #include <bitset>
-
 
 using namespace std;
 
-namespace {
-    string isOn(char letter) {
+
+int auto1d(int rule, char *positions, int limit) {
+    auto isOn = [](char letter) -> string {
         if (letter == 'o')
             return "1";
         else
             return "0";
-    }
-}
-
-int auto1d(int rule, char *positions, int limit) {
+    };
     const string dictionary = bitset<8>(rule).to_string();
     string parent(positions);
     int max_lines = limit;
 
     int length = parent.size();
     int state{0};
+
+    cout << parent << endl;
+
     while (max_lines > 0) {
         string child{};
         for (int i = 0; i < length; i++) {
@@ -38,16 +31,24 @@ int auto1d(int rule, char *positions, int limit) {
             } else {
                 state = bitset<3>(string(isOn(parent[i - 1]) + isOn(parent[i]) + isOn(parent[i + 1]))).to_ulong();
             }
-            child += dictionary[state];
+            child += dictionary[7 - state] == '0' ? " " : "o";
         }
         cout << child << endl;
         max_lines--;
         if (parent.compare(child) == 0)
             break;
+        parent = child;
 
     }
     return limit - max_lines;
 }
 
 
-#endif
+int main() {
+    int generated_rows = auto1d(18, "          o          ", 20);
+    cout << "Number of rows : " << generated_rows << endl;
+    generated_rows = auto1d(204, "          o          ", 20);
+    cout << "Number of rows : " << generated_rows << endl;
+
+    return 0;
+}
