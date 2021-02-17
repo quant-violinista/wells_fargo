@@ -7,7 +7,6 @@
 using namespace std;
 
 
-
 namespace {
     string isOn(char letter) {
         if (letter == 'o')
@@ -24,6 +23,9 @@ int auto1d(int rule, char *positions, int limit) {
 
     int length = parent.size();
     int state{0};
+
+    cout << parent << endl;
+
     while (max_lines > 0) {
         string child{};
         for (int i = 0; i < length; i++) {
@@ -34,12 +36,13 @@ int auto1d(int rule, char *positions, int limit) {
             } else {
                 state = bitset<3>(string(isOn(parent[i - 1]) + isOn(parent[i]) + isOn(parent[i + 1]))).to_ulong();
             }
-            child += dictionary[state];
+            child += dictionary[7 - state] == '0' ? " " : "o";
         }
         cout << child << endl;
         max_lines--;
         if (parent.compare(child) == 0)
             break;
+        parent = child;
 
     }
     return limit - max_lines;
@@ -47,11 +50,11 @@ int auto1d(int rule, char *positions, int limit) {
 
 
 int main() {
+    const int generated_rows = auto1d(18, "          o          ", 20);
+    cout << "Number of rows" << generated_rows << endl;
 
-    cout << "Number of rows" << auto1d(18, " o ", 20) <<endl;
 
-
-    TimeSeries ts(5, 20);
+/*    TimeSeries ts(5, 20);
     try {
         for (int time = 5; time <= 15; time++) {
             ts.add(time, time * time);
@@ -67,5 +70,5 @@ int main() {
     catch (char const *e) {
         cout << e << endl;
     }
-    return 0;
+    return 0;*/
 }
