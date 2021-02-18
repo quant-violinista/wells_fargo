@@ -3,4 +3,4 @@ project(patterns)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(wells_fargo pattern.cpp)
+add_executable(wells_fargo auto1d.cpp)

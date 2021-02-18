@@ -1,13 +1,28 @@
 //
-// Created by Prasenjit on 2/16/2021.
+// Created by Prasenjit Dutt on 2/16/2021.
 //
 
 #include "TimeSeries.h"
 #include <algorithm>
 
 
-TimeSeries::TimeSeries(int start, int duration) : _start(start), _duration(duration) {
+TimeSeries::TimeSeries(int duration, int start = 0) : _start(start), _duration(duration) {
     _data = new double[_duration]{};
+}
+
+TimeSeries::TimeSeries(const TimeSeries &other) {
+    _duration = other._duration;
+    _start = other._start;
+    _data = new double[other._duration]{};
+    std::copy(other._data, other._data + other._duration, _data);
+}
+
+TimeSeries &TimeSeries::operator=(const TimeSeries &other) {
+    _duration = other._duration;
+    _start = other._start;
+    _data = new double[other._duration]{};
+    std::copy(other._data, other._data + other._duration, _data);
+    return *this;
 }
 
 TimeSeries::~TimeSeries() {
@@ -28,20 +43,18 @@ void TimeSeries::add(int timestamp, double value) {
         _data = p;
         p = nullptr;
         _start = timestamp;
-    }
-    else if (pos >= _duration) {
+    } else if (pos >= _duration) {
         double *p = new double[_duration]{};
-        p[0] = value;
-        const int shift = pos - _duration;
+        p[_duration - 1] = value;
+        const int shift = pos - _duration + 1;
         if (shift < _duration) {
             std::copy(_data + shift, _data + _duration, p);
         }
         delete[] _data;
         _data = p;
         p = nullptr;
-        _start = timestamp-_duration;
-    }
-    else {
+        _start += shift;
+    } else {
         _data[pos] = value;
     }
 }
