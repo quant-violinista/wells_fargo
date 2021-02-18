@@ -1,4 +1,4 @@
-# wells_fargo
+# Wells Fargo
 
 ## TimeSeries
 - I've designed a fixed capacity time series object. The capacity is determined at creation.
